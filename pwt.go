@@ -70,7 +70,7 @@ func Sign(token *Token, kf KeyFunc, codec Codec) (string, error) {
 		return "", err
 	}
 
-	payload, err := codec.Encode(sign)
+	payload, err := codec.Encode(body)
 	if err != nil {
 		return "", err
 	}
