@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package bloxite.pwt;
+option go_package = "pwt";
+option (gogoproto.goproto_registration) = true;
+option (gogoproto.messagename_all) = true;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+enum Algo {
+  option (gogoproto.enum_stringer) = false;
+  ALGO_UNKNOWN = 0;
+  ALGO_HS256 = 10;
+  ALGO_HS384 = 11;
+  ALGO_HS512 = 12;
+//  TODO
+//  ALGO_RS256 = 20;
+//  ALGO_RS384 = 21;
+//  ALGO_RS512 = 22;
+//  ALGO_ES256 = 30;
+//  ALGO_ES384 = 31;
+//  ALGO_ES512 = 32;
+//  ALGO_PS256 = 40;
+//  ALGO_PS384 = 41;
+}
+
+message Claims {
+  google.protobuf.Timestamp issued_at = 1 [(gogoproto.stdtime) = true, (gogoproto.jsontag) = "iat,omitempty"];
+  google.protobuf.Timestamp expires_at = 2 [(gogoproto.stdtime) = true, (gogoproto.jsontag) = "exp,omitempty"];
+  google.protobuf.Timestamp not_before = 3 [(gogoproto.stdtime) = true, (gogoproto.jsontag) = "nbf,omitempty"];
+  string pwt_id = 4 [(gogoproto.jsontag) = "pti,omitempty", (gogoproto.customname) = "PWTID"];
+  string audience = 5 [(gogoproto.jsontag) = "aud,omitempty"];
+  string issuer = 6 [(gogoproto.jsontag) = "iss,omitempty"];
+  string subject = 7 [(gogoproto.jsontag) = "sub,omitempty"];
+}
+
+message Token {
+  Claims claims = 1 [(gogoproto.nullable) = false];
+  Algo algo = 2 [(gogoproto.jsontag) = "alg"];
+  bytes extra = 3;
+}
